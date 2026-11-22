@@ -40,7 +40,6 @@ To paste automatically, choose **Enable Pasting…** in the menu and enable Gosc
 
 ## The panel
 
-- It opens small in the top right corner. Pick another place under **Position** in the menu.
 - A pulse keeps racing around its edge, like a signal running through redstone. With *Reduce Motion* on, it stands still.
 
 ## Languages

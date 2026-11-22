@@ -39,11 +39,6 @@ final class Settings {
         set { defaults.set(newValue, forKey: "showsMenuBarIcon") }
     }
 
-    var position: PanelPosition {
-        get { defaults.string(forKey: "position").flatMap(PanelPosition.init) ?? .topRight }
-        set { defaults.set(newValue.rawValue, forKey: "position") }
-    }
-
     var choice: LanguageChoice { LanguageChoice(source: source, target: target, home: homeLanguage) }
 
     var launchesAtLogin: Bool { SMAppService.mainApp.status == .enabled }

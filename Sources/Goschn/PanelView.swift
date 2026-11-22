@@ -20,7 +20,7 @@ struct PanelView: View {
         .glassPanel()
         .overlay(EdgePulse(shape: PanelStyle.shape, isRunning: model.isOpen))
         .padding(PanelStyle.margin)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: alignment)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .tint(.primary)
         .onChange(of: model.focusToken, initial: true) { isFocused = true }
         .translationTask(model.download) { session in
@@ -38,19 +38,15 @@ struct PanelView: View {
         .frame(height: 1)
     }
 
-    private var alignment: Alignment {
-        model.position.isBottom ? .bottom : .top
-    }
-
     private var input: some View {
         TextField("Type to translate…", text: $model.input, axis: .vertical)
             .textFieldStyle(.plain)
             .font(.system(size: PanelStyle.textSize))
-            .lineLimit(1...5)
+            .lineLimit(1...6)
             .focused($isFocused)
             .accessibilityLabel("Text to translate")
             .padding(.horizontal, PanelStyle.padding)
-            .padding(.vertical, 15)
+            .padding(.vertical, 20)
     }
 
     @ViewBuilder private var result: some View {
@@ -61,9 +57,9 @@ struct PanelView: View {
                     Spacer()
                     Button("Download…") { model.startDownload() }
                 }
-                .font(.system(size: 13))
+                .font(.system(size: 14))
             } else if let error = model.errorText {
-                Text(error).font(.system(size: 13)).foregroundStyle(.secondary)
+                Text(error).font(.system(size: 14)).foregroundStyle(.secondary)
             } else {
                 TranslationText(live: model.live)
                     .environment(\.layoutDirection, isRightToLeft ? .rightToLeft : .leftToRight)
@@ -72,7 +68,7 @@ struct PanelView: View {
         .font(.system(size: PanelStyle.textSize, weight: .medium))
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, PanelStyle.padding)
-        .padding(.vertical, 14)
+        .padding(.vertical, 20)
     }
 
     private var isRightToLeft: Bool {

@@ -17,7 +17,6 @@ final class PanelModel {
     var canPaste = false
     /// Animations rest while the panel is hidden.
     var isOpen = false
-    private(set) var position: PanelPosition
     /// Changes on every opening so the view can focus the text field.
     var focusToken = 0
     var download: TranslationSession.Configuration?
@@ -30,7 +29,6 @@ final class PanelModel {
         self.settings = settings
         choice = settings.choice
         quickTargets = settings.quickTargets
-        position = settings.position
         let translator = self.translator
         live = LiveTranslation { try await translator.translate($0, $1) }
     }
@@ -75,11 +73,6 @@ final class PanelModel {
         choice.home = id
         settings.homeLanguage = id
         refresh()
-    }
-
-    func choosePosition(_ position: PanelPosition) {
-        self.position = position
-        settings.position = position
     }
 
     func swap() {

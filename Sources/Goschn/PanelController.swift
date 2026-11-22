@@ -4,9 +4,6 @@ import SwiftUI
 
 private final class FloatingPanel: NSPanel {
     override var canBecomeKey: Bool { true }
-
-    /// The invisible margin may reach past the edge of the screen.
-    override func constrainFrameRect(_ frameRect: NSRect, to screen: NSScreen?) -> NSRect { frameRect }
 }
 
 /// Shows the floating panel without activating the app, so the app the user
@@ -147,13 +144,14 @@ final class PanelController: NSObject, NSWindowDelegate {
 
     // MARK: - Layout
 
-    /// The chosen corner of the screen the mouse is on.
+    /// Upper third of the screen the mouse is on.
     private func place() {
         let mouse = NSEvent.mouseLocation
         let screen = NSScreen.screens.first { NSMouseInRect(mouse, $0.frame, false) } ?? NSScreen.main
         guard let area = screen?.visibleFrame else { return }
-        panel.setFrameOrigin(model.position.origin(
-            window: panel.frame.size, margin: PanelStyle.margin, gap: PanelStyle.gap, in: area
+        panel.setFrameTopLeftPoint(NSPoint(
+            x: area.midX - panel.frame.width / 2,
+            y: area.maxY - area.height * 0.2 + PanelStyle.margin
         ))
     }
 }
