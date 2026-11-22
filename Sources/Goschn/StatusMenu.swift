@@ -21,7 +21,7 @@ final class StatusMenu: NSObject, NSMenuDelegate {
         self.onChangeShortcut = onChangeShortcut
         self.model = model
         super.init()
-        item.button?.image = NSImage(systemSymbolName: "translate", accessibilityDescription: "Goschn")
+        item.button?.image = NSImage(systemSymbolName: "mouth.fill", accessibilityDescription: "Goschn")
         let menu = NSMenu()
         menu.delegate = self
         item.menu = menu
