@@ -40,7 +40,8 @@ To paste automatically, choose **Enable Pasting…** in the menu and enable Gosc
 
 ## The panel
 
-- A pulse keeps racing around its edge, like a signal running through redstone. With *Reduce Motion* on, it stands still.
+- A pulse keeps racing around its edge. It takes its color from the icon of the app you are in: green in WhatsApp, blue in Safari, silver where the icon is gray.
+- With *Reduce Motion* on, it stands still.
 
 ## Languages
 
