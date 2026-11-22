@@ -61,6 +61,20 @@ import Testing
         #expect(!live.isBusy)
     }
 
+    @Test func isPendingFromKeystrokeToResult() async {
+        let live = make()
+        live.update("hallo", pair: pair)
+        #expect(live.isPending)
+        _ = await live.finish("hallo", pair: pair)
+        #expect(!live.isPending)
+        #expect(live.translatedText == "hallo")
+        live.update("hallo du", pair: pair)
+        #expect(live.isPending)
+        live.update("", pair: pair)
+        #expect(!live.isPending)
+        #expect(live.translatedText.isEmpty)
+    }
+
     @Test func emptyTextClearsTheOutput() async {
         let live = make()
         _ = await live.finish("hallo", pair: pair)

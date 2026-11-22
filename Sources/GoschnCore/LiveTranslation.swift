@@ -16,6 +16,10 @@ public final class LiveTranslation {
 
     public private(set) var output = ""
     public private(set) var isBusy = false
+    /// True from the first changed keystroke until its translation arrived.
+    public private(set) var isPending = false
+    /// The text that `output` translates.
+    public private(set) var translatedText = ""
     public private(set) var error: (any Error)?
 
     @ObservationIgnored private var wanted: Request?
@@ -59,11 +63,14 @@ public final class LiveTranslation {
             wanted = nil
             done = nil
             output = ""
+            translatedText = ""
+            isPending = false
             error = nil
             return false
         }
         wanted = request
-        return done != request
+        isPending = done != request
+        return isPending
     }
 
     private func startWorker() {
@@ -77,12 +84,16 @@ public final class LiveTranslation {
                     let translated = bodies.isEmpty ? [] : try await engine(bodies, request.pair)
                     guard wanted == request else { continue }
                     output = layout.rebuild(with: translated)
+                    translatedText = request.text
+                    isPending = false
                     error = nil
                     done = request
                 } catch {
                     guard wanted == request else { continue }
                     self.error = error
                     output = ""
+                    translatedText = ""
+                    isPending = false
                     done = nil
                     wanted = nil
                 }
