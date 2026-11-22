@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.5.0
+
+- New glass panel: see-through, with a glossy edge
+- The menu bar icon can be removed; the menu is also in the panel (⋯)
+
 ## 0.4.1
 
 - A calm shimmer replaces the restless letters while translating
