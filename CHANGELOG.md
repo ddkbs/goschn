@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.6.0
+
+- Much smaller panel that opens in a corner; choose which one under Position
+- A little mouth that talks while translating and grins when done
+- The panel speaks a little Bavarian
+
 ## 0.5.0
 
 - New glass panel: see-through, with a glossy edge
