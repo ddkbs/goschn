@@ -6,6 +6,10 @@
 
 A tiny native macOS menu bar app. It uses Apple's on-device translation, so it is free, private and works offline. No account, no API key, no dependencies.
 
+## Why "Goschn"?
+
+*Goschn* (say "GOSH-n") is Bavarian for mouth, or rather gob. In standard German it is *Gosche*, used across southern Germany and Austria. Someone with *a große Goschn* has a big mouth and something to say about everything. This one says it in over 20 languages.
+
 ## Install
 
 Needs macOS 26 or later and Xcode 26.4 or later.
@@ -18,7 +22,7 @@ cd goschn
 
 This builds `Goschn.app`, copies it to `/Applications` and starts it. It launches at login; you can turn that off in the menu.
 
-To paste automatically, click **Allow auto-paste…** in the panel and enable Goschn under *System Settings → Privacy & Security → Accessibility*. Without it, Enter only copies.
+To paste automatically, click **Enable pasting** in the panel and enable Goschn under *System Settings → Privacy & Security → Accessibility*. Without it, Enter only copies.
 
 ## Keys
 
