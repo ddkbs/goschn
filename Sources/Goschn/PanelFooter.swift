@@ -1,34 +1,37 @@
 import GoschnCore
 import SwiftUI
 
-/// Languages on the left, what Enter does on the right. Nothing else.
+/// Languages on the left, options and what Enter does on the right.
 struct PanelFooter: View {
     let model: PanelModel
 
     var body: some View {
-        HStack(spacing: 14) {
-            languages
+        HStack(spacing: 8) {
+            languages.chip()
             Spacer()
             if !model.canPaste {
                 Button("Enable pasting") { Paster.requestPermission() }
-                    .buttonStyle(.plain)
+                    .chip()
                     .help("Needs the Accessibility permission. Without it, ↩ only copies.")
             }
-            enterHint
+            Button { model.showMenu?() } label: {
+                Image(systemName: "ellipsis").frame(height: 14)
+            }
+            .chip()
+            .help("Options")
+            .accessibilityLabel("Options")
+            enterHint.chip()
         }
+        .buttonStyle(.plain)
         .font(.system(size: 12, weight: .medium))
-        .foregroundStyle(.secondary)
-        .padding(.horizontal, PanelStyle.padding)
-        .frame(height: PanelStyle.footerHeight)
-        .background(PanelStyle.footer)
+        .padding(.horizontal, PanelStyle.padding - 10)
+        .padding(.bottom, 14)
     }
 
     private var enterHint: some View {
-        HStack(spacing: 7) {
-            Text(model.canPaste ? "Paste" : "Copy").foregroundStyle(.primary)
-            Text("↩")
-                .frame(width: 20, height: 20)
-                .background(Color.primary.opacity(0.08), in: .rect(cornerRadius: 5))
+        HStack(spacing: 6) {
+            Text(model.canPaste ? "Paste" : "Copy")
+            Text("↩").foregroundStyle(.secondary)
         }
         .help("↩ \(model.canPaste ? "pastes" : "copies"), ⌘↩ only copies")
         .accessibilityElement(children: .combine)
@@ -45,7 +48,9 @@ struct PanelFooter: View {
             }
             .accessibilityLabel("Translate from \(sourceName)")
             Button { model.swap() } label: {
-                Image(systemName: "arrow.right").font(.system(size: 10, weight: .semibold)).opacity(0.7)
+                Image(systemName: "arrow.right")
+                    .font(.system(size: 10, weight: .semibold))
+                    .foregroundStyle(.secondary)
             }
             .help("Swap direction (Tab)")
             .accessibilityLabel("Swap direction")
@@ -63,7 +68,6 @@ struct PanelFooter: View {
             .accessibilityLabel("Translate to \(name(model.pair.target))")
         }
         .menuStyle(.button)
-        .buttonStyle(.plain)
         .menuIndicator(.hidden)
         .lineLimit(1)
         .fixedSize()
@@ -79,4 +83,14 @@ struct PanelFooter: View {
     }
 
     private func name(_ id: String) -> String { AppleTranslator.displayName(id) }
+}
+
+private extension View {
+    /// A small pill on the glass.
+    func chip() -> some View {
+        padding(.horizontal, 11)
+            .frame(height: 26)
+            .background(.primary.opacity(0.11), in: .capsule)
+            .contentShape(.capsule)
+    }
 }

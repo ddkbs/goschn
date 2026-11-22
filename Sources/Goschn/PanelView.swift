@@ -13,15 +13,11 @@ struct PanelView: View {
                 line
                 result
             }
-            line
             PanelFooter(model: model)
         }
         .frame(width: PanelStyle.width)
         .fixedSize(horizontal: false, vertical: true)
-        .background(PanelStyle.background)
-        .clipShape(shape)
-        .overlay(shape.strokeBorder(PanelStyle.border, lineWidth: 1))
-        .background(shape.fill(.black).shadow(color: .black.opacity(0.28), radius: 24, y: 12))
+        .glassPanel()
         .padding(PanelStyle.margin)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .tint(.primary)
@@ -32,12 +28,13 @@ struct PanelView: View {
         }
     }
 
-    private var shape: RoundedRectangle {
-        RoundedRectangle(cornerRadius: PanelStyle.cornerRadius, style: .continuous)
-    }
-
+    /// A hairline that fades out before it reaches the edges.
     private var line: some View {
-        PanelStyle.line.frame(height: 1)
+        LinearGradient(
+            colors: [.clear, .primary.opacity(0.2), .primary.opacity(0.2), .clear],
+            startPoint: .leading, endPoint: .trailing
+        )
+        .frame(height: 1)
     }
 
     private var input: some View {
@@ -47,7 +44,8 @@ struct PanelView: View {
             .lineLimit(1...6)
             .focused($isFocused)
             .accessibilityLabel("Text to translate")
-            .padding(PanelStyle.padding)
+            .padding(.horizontal, PanelStyle.padding)
+            .padding(.vertical, 20)
     }
 
     @ViewBuilder private var result: some View {
@@ -68,7 +66,8 @@ struct PanelView: View {
         }
         .font(.system(size: PanelStyle.textSize, weight: .medium))
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(PanelStyle.padding)
+        .padding(.horizontal, PanelStyle.padding)
+        .padding(.vertical, 20)
     }
 
     private var isRightToLeft: Bool {
