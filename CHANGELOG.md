@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.0
+
+- Translate between any two supported languages, not only to English
+- Detects the language you type; text in the target language goes back to yours
+- Language menus in the panel, `⌘1`…`⌘5` for recent targets
+- Command line: `--from` and `--to`
+
 ## 0.1.0
 
 - Floating panel with live on-device translation to English
