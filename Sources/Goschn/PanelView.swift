@@ -61,28 +61,14 @@ struct PanelView: View {
                 .font(.system(size: 14))
             } else if let error = model.errorText {
                 Text(error).font(.system(size: 14)).foregroundStyle(.secondary)
-            } else if model.live.output.isEmpty {
-                Text("…").foregroundStyle(.tertiary).accessibilityLabel("Translating")
             } else {
-                // Scrolls only when a long translation outgrows the panel.
-                ViewThatFits(in: .vertical) {
-                    output
-                    ScrollView { output }
-                }
-                .frame(maxHeight: PanelStyle.maxOutputHeight)
+                ScrambleText(live: model.live, input: model.input)
+                    .environment(\.layoutDirection, isRightToLeft ? .rightToLeft : .leftToRight)
             }
         }
         .font(.system(size: PanelStyle.textSize, weight: .medium))
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(PanelStyle.padding)
-    }
-
-    private var output: some View {
-        Text(model.live.output)
-            .textSelection(.enabled)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .environment(\.layoutDirection, isRightToLeft ? .rightToLeft : .leftToRight)
-            .accessibilityLabel("Translation")
     }
 
     private var isRightToLeft: Bool {
