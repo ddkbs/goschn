@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.1
+
+- The panel sits exactly in the middle of the screen and grows from there
+
 ## 0.8.0
 
 - The pulse takes its color from the app you are in
