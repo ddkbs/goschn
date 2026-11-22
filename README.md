@@ -2,7 +2,7 @@
 
 **Press a shortcut, type in any language, hit Enter: the translation lands where your cursor was.**
 
-![The Goschn panel translating German to Spanish](docs/panel.png)
+![The Goschn panel translating German to English](docs/panel.png)
 
 A tiny native macOS menu bar app. It uses Apple's on-device translation, so it is free, private and works offline. No account, no API key, no dependencies.
 
@@ -21,6 +21,8 @@ cd goschn
 ```
 
 This builds `Goschn.app`, copies it to `/Applications` and starts it. It launches at login; you can turn that off in the menu.
+
+Don't want the icon? Choose **Remove from Menu Bar…** in the menu. The same menu is always behind **⋯** in the panel, so you can bring the icon back there.
 
 To paste automatically, click **Enable pasting** in the panel and enable Goschn under *System Settings → Privacy & Security → Accessibility*. Without it, Enter only copies.
 
