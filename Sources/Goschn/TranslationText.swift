@@ -21,9 +21,7 @@ struct TranslationText: View {
 
     @ViewBuilder private var content: some View {
         if live.output.isEmpty {
-            // Bavarian for "wait a bit".
-            ShimmerText(text: "Wart a bissl…")
-                .accessibilityLabel("Translating")
+            ShimmerText(text: "Translating…")
                 .transition(.opacity)
         } else if live.isPending {
             ShimmerText(text: live.output).transition(.opacity)

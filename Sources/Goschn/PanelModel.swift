@@ -93,11 +93,6 @@ final class PanelModel {
 
     var hasText: Bool { !input.allSatisfy(\.isWhitespace) }
 
-    var mood: Mouth.Mood {
-        if live.isPending { return .talking }
-        return live.output.isEmpty ? .quiet : .happy
-    }
-
     var needsDownload: Bool {
         guard let error = live.error else { return false }
         return TranslationError.notInstalled ~= error

@@ -42,22 +42,14 @@ struct PanelView: View {
     }
 
     private var input: some View {
-        HStack(alignment: .top, spacing: PanelStyle.mouthSpacing) {
-            Mouth(mood: model.mood)
-            textField
-        }
-        .padding(.horizontal, PanelStyle.padding)
-        .padding(.vertical, 15)
-    }
-
-    private var textField: some View {
-        // Bavarian for "just talk".
-        TextField("Red hoid…", text: $model.input, axis: .vertical)
+        TextField("Type to translate…", text: $model.input, axis: .vertical)
             .textFieldStyle(.plain)
             .font(.system(size: PanelStyle.textSize))
             .lineLimit(1...5)
             .focused($isFocused)
             .accessibilityLabel("Text to translate")
+            .padding(.horizontal, PanelStyle.padding)
+            .padding(.vertical, 15)
     }
 
     @ViewBuilder private var result: some View {
@@ -78,8 +70,6 @@ struct PanelView: View {
         }
         .font(.system(size: PanelStyle.textSize, weight: .medium))
         .frame(maxWidth: .infinity, alignment: .leading)
-        // Lines up with the typed text.
-        .padding(.leading, PanelStyle.mouthSize.width + PanelStyle.mouthSpacing)
         .padding(.horizontal, PanelStyle.padding)
         .padding(.vertical, 14)
     }

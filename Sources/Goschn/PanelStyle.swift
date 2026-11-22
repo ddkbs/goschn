@@ -8,8 +8,6 @@ enum PanelStyle {
     static let padding: CGFloat = 16
     static let textSize: CGFloat = 16
     static let maxOutputHeight: CGFloat = 200
-    static let mouthSize = CGSize(width: 26, height: 20)
-    static let mouthSpacing: CGFloat = 12
     /// Distance to the edges of the screen.
     static let gap: CGFloat = 14
     /// Invisible room around the panel for its shadow.
