@@ -32,7 +32,7 @@ final class PanelController: NSObject, NSWindowDelegate {
         panel.isMovableByWindowBackground = true
         panel.animationBehavior = .utilityWindow
         panel.isReleasedWhenClosed = false
-        panel.title = "Rüber"
+        panel.title = "Goschn"
         panel.delegate = self
         panel.contentView = makeContent()
     }

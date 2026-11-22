@@ -1,4 +1,4 @@
-import RueberCore
+import GoschnCore
 import SwiftUI
 import Translation
 

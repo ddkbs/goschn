@@ -2,12 +2,12 @@
 import PackageDescription
 
 let package = Package(
-    name: "Rueber",
+    name: "Goschn",
     platforms: [.macOS(.v26)],
     targets: [
-        .target(name: "RueberCore"),
-        .executableTarget(name: "Rueber", dependencies: ["RueberCore"]),
-        .testTarget(name: "RueberCoreTests", dependencies: ["RueberCore"]),
+        .target(name: "GoschnCore"),
+        .executableTarget(name: "Goschn", dependencies: ["GoschnCore"]),
+        .testTarget(name: "GoschnCoreTests", dependencies: ["GoschnCore"]),
     ],
     swiftLanguageModes: [.v5]
 )

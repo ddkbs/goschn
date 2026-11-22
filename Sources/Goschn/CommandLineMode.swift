@@ -1,7 +1,7 @@
 import Foundation
-import RueberCore
+import GoschnCore
 
-/// `Rueber [--from de] [--to fr] --translate "Text"` prints a translation without any UI.
+/// `Goschn [--from de] [--to fr] --translate "Text"` prints a translation without any UI.
 enum CommandLineMode {
     @MainActor
     static func run(arguments: [String]) -> Never {

@@ -1,5 +1,5 @@
 import Testing
-@testable import RueberCore
+@testable import GoschnCore
 
 @Suite struct LanguageChoiceTests {
     private func pair(_ source: String?, _ target: String, home: String = "de", detected: String?) -> String {

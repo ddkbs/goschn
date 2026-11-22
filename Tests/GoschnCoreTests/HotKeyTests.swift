@@ -1,7 +1,7 @@
 import AppKit
 import Carbon.HIToolbox
 import Testing
-@testable import RueberCore
+@testable import GoschnCore
 
 @Suite struct HotKeyTests {
     @Test func labels() {

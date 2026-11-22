@@ -1,5 +1,5 @@
 import Testing
-@testable import RueberCore
+@testable import GoschnCore
 
 @Suite struct LanguagePairTests {
     @Test func reverse() {

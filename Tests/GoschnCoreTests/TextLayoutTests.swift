@@ -1,5 +1,5 @@
 import Testing
-@testable import RueberCore
+@testable import GoschnCore
 
 @Suite struct TextLayoutTests {
     private func upper(_ text: String) -> String {

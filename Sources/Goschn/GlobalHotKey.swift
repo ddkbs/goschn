@@ -1,6 +1,6 @@
 import AppKit
 import Carbon.HIToolbox
-import RueberCore
+import GoschnCore
 
 /// Registers one system-wide shortcut. Carbon hot keys need no permission.
 @MainActor
@@ -23,7 +23,7 @@ final class GlobalHotKey {
     @discardableResult
     func register(_ hotKey: HotKey) -> Bool {
         unregister()
-        let id = EventHotKeyID(signature: OSType(0x5255_4542), id: 1)  // "RUEB"
+        let id = EventHotKeyID(signature: OSType(0x474F_5348), id: 1)  // "GOSH"
         let status = RegisterEventHotKey(
             hotKey.keyCode, hotKey.carbonModifiers, id, GetApplicationEventTarget(), 0, &reference
         )

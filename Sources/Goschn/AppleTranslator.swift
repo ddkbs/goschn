@@ -1,5 +1,5 @@
 import Foundation
-import RueberCore
+import GoschnCore
 import Translation
 
 /// Apple's on-device translation: free, private and offline once the

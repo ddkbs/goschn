@@ -1,5 +1,5 @@
 import AppKit
-import RueberCore
+import GoschnCore
 
 /// The menu bar icon and its menu.
 @MainActor
@@ -21,7 +21,7 @@ final class StatusMenu: NSObject, NSMenuDelegate {
         self.onChangeShortcut = onChangeShortcut
         self.model = model
         super.init()
-        item.button?.image = NSImage(systemSymbolName: "translate", accessibilityDescription: "Rüber")
+        item.button?.image = NSImage(systemSymbolName: "translate", accessibilityDescription: "Goschn")
         let menu = NSMenu()
         menu.delegate = self
         item.menu = menu
@@ -40,7 +40,7 @@ final class StatusMenu: NSObject, NSMenuDelegate {
         login.state = settings.launchesAtLogin ? .on : .off
         menu.addItem(login)
         menu.addItem(.separator())
-        menu.addItem(withTitle: "Quit Rüber", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
+        menu.addItem(withTitle: "Quit Goschn", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
     }
 
     private func languageEntry() -> NSMenuItem {

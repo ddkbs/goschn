@@ -1,7 +1,7 @@
 import AppKit
 
 @main
-enum RueberApp {
+enum GoschnApp {
     // Kept alive here because NSApplication only holds its delegate weakly.
     @MainActor private static let delegate = AppDelegate()
 

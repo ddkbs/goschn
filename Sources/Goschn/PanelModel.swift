@@ -1,6 +1,6 @@
 import Foundation
 import Observation
-import RueberCore
+import GoschnCore
 import Translation
 
 /// Everything the panel shows.

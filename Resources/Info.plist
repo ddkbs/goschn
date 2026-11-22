@@ -2,10 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>CFBundleName</key><string>Rüber</string>
-    <key>CFBundleDisplayName</key><string>Rüber</string>
-    <key>CFBundleIdentifier</key><string>dev.davidkubus.rueber</string>
-    <key>CFBundleExecutable</key><string>Rueber</string>
+    <key>CFBundleName</key><string>Goschn</string>
+    <key>CFBundleDisplayName</key><string>Goschn</string>
+    <key>CFBundleIdentifier</key><string>dev.davidkubus.goschn</string>
+    <key>CFBundleExecutable</key><string>Goschn</string>
     <key>CFBundleIconFile</key><string>AppIcon</string>
     <key>CFBundlePackageType</key><string>APPL</string>
     <key>CFBundleShortVersionString</key><string>0.2.0</string>

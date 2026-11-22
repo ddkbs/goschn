@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import RueberCore
+@testable import GoschnCore
 
 @MainActor
 @Suite struct LiveTranslationTests {

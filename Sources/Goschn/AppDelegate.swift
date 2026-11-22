@@ -1,5 +1,5 @@
 import AppKit
-import RueberCore
+import GoschnCore
 
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
