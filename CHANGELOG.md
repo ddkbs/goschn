@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.0
+
+- The app is now called Goschn (it was Rüber)
+- New, much simpler panel in light and dark
+- Fixed: the panel could be cut off when opened a second time
+- New app icon
+
 ## 0.2.0
 
 - Translate between any two supported languages, not only to English
