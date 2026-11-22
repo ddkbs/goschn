@@ -1,26 +1,33 @@
+import GoschnCore
 import SwiftUI
 
-/// A glowing pulse that keeps racing around the edge, like a signal running
-/// through redstone.
+/// A glowing pulse that keeps racing around the edge, in a color that fits
+/// the app the user came from.
 struct EdgePulse: View {
     let shape: RoundedRectangle
+    let color: PulseColor
     let isRunning: Bool
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.colorScheme) private var colorScheme
+
+    private var tail: PulseColor { color.glowing(onDark: colorScheme == .dark) }
+    /// White would vanish on a light panel.
+    private var head: PulseColor { tail.mixedWithWhite(colorScheme == .dark ? 0.6 : 0.15) }
 
     var body: some View {
         Group {
             if reduceMotion {
                 shape.strokeBorder(
                     LinearGradient(
-                        colors: [Color(cgColor: PulseView.red), .clear, Color(cgColor: PulseView.red)],
+                        colors: [Color(cgColor: tail.cgColor), .clear, Color(cgColor: tail.cgColor)],
                         startPoint: .topLeading, endPoint: .bottomTrailing
                     ),
                     lineWidth: 1.2
                 )
                 .opacity(0.7)
             } else if isRunning {
-                Pulse(shape: shape)
+                Pulse(shape: shape, tail: tail.cgColor, head: head.cgColor)
             }
         }
         .allowsHitTesting(false)
@@ -30,28 +37,34 @@ struct EdgePulse: View {
 
 private struct Pulse: NSViewRepresentable {
     let shape: RoundedRectangle
+    let tail: CGColor
+    let head: CGColor
 
     func makeNSView(context: Context) -> PulseView { PulseView(shape: shape) }
-    func updateNSView(_ view: PulseView, context: Context) {}
+    func updateNSView(_ view: PulseView, context: Context) { view.setColors(tail: tail, head: head) }
+}
+
+private extension PulseColor {
+    var cgColor: CGColor { CGColor(srgbRed: red, green: green, blue: blue, alpha: 1) }
 }
 
 /// Core Animation moves the pulse, so it costs the app no CPU time per frame.
-final class PulseView: NSView {
-    static let red = CGColor(srgbRed: 1, green: 0.16, blue: 0.12, alpha: 1)
-    private static let hot = CGColor(srgbRed: 1, green: 0.72, blue: 0.58, alpha: 1)
-
+private final class PulseView: NSView {
     /// Seconds for one lap.
     private static let lap = 2.6
     /// Share of the edge that the tail covers.
     private static let tail = 0.34
-    /// Share of the edge that the hot head covers.
+    /// Share of the edge that the bright head covers.
     private static let head = 0.10
     /// Copies in the tail, close enough to overlap.
-    private static let tailCopies = 110
+    private static let tailCopies = 190
     private static let dash: CGFloat = 14
     private static let inset: CGFloat = 0.6
 
     private let shape: RoundedRectangle
+    private let glowTrail = CAReplicatorLayer()
+    private let tailTrail = CAReplicatorLayer()
+    private let headTrail = CAReplicatorLayer()
     private var movers: [CALayer] = []
     private var drawnSize = CGSize.zero
 
@@ -60,13 +73,19 @@ final class PulseView: NSView {
         super.init(frame: .zero)
         wantsLayer = true
         layer?.masksToBounds = false
-        addTrail(Self.glow(radius: 11), color: Self.red, opacity: 0.11, share: Self.tail)
-        addTrail(Self.line, color: Self.red, opacity: 0.6, share: Self.tail)
-        addTrail(Self.line, color: Self.hot, opacity: 0.8, share: Self.head)
+        add(glowTrail, Self.glow(radius: 11), opacity: 0.11, share: Self.tail)
+        add(tailTrail, Self.line, opacity: 0.6, share: Self.tail)
+        add(headTrail, Self.line, opacity: 0.8, share: Self.head)
     }
 
     @available(*, unavailable)
     required init?(coder: NSCoder) { fatalError("init(coder:) is not used") }
+
+    func setColors(tail: CGColor, head: CGColor) {
+        glowTrail.instanceColor = tail
+        tailTrail.instanceColor = tail
+        headTrail.instanceColor = head
+    }
 
     override var isFlipped: Bool { true }
     override func hitTest(_ point: NSPoint) -> NSView? { nil }
@@ -89,13 +108,11 @@ final class PulseView: NSView {
     }
 
     /// A row of copies that follow each other and fade out.
-    private func addTrail(_ mover: CALayer, color: CGColor, opacity: Float, share: Double) {
+    private func add(_ trail: CAReplicatorLayer, _ mover: CALayer, opacity: Float, share: Double) {
         let copies = max(2, Int(Double(Self.tailCopies) * share / Self.tail))
-        let trail = CAReplicatorLayer()
         trail.instanceCount = copies
         trail.instanceDelay = Self.lap * share / Double(copies)
         trail.instanceAlphaOffset = -1 / Float(copies)
-        trail.instanceColor = color
         mover.opacity = opacity
         trail.addSublayer(mover)
         layer?.addSublayer(trail)

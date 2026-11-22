@@ -42,6 +42,9 @@ final class PanelController: NSObject, NSWindowDelegate {
         model.canPaste = Paster.canPaste
         model.translator.warmUp(model.pair)
         place()
+        if let app = NSWorkspace.shared.frontmostApplication, app != .current {
+            model.pulseColor = AppColor.of(app)
+        }
         model.isOpen = true
         panel.makeKeyAndOrderFront(nil)
         model.focusToken += 1

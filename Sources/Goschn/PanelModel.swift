@@ -17,6 +17,8 @@ final class PanelModel {
     var canPaste = false
     /// Animations rest while the panel is hidden.
     var isOpen = false
+    /// Fits the app the user came from.
+    var pulseColor = PulseColor.silver
     /// Changes on every opening so the view can focus the text field.
     var focusToken = 0
     var download: TranslationSession.Configuration?
