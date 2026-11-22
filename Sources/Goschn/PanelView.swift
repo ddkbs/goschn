@@ -62,7 +62,7 @@ struct PanelView: View {
             } else if let error = model.errorText {
                 Text(error).font(.system(size: 14)).foregroundStyle(.secondary)
             } else {
-                ScrambleText(live: model.live, input: model.input)
+                TranslationText(live: model.live)
                     .environment(\.layoutDirection, isRightToLeft ? .rightToLeft : .leftToRight)
             }
         }
