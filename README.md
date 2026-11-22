@@ -41,8 +41,7 @@ To paste automatically, choose **Enable Pasting…** in the menu and enable Gosc
 ## The panel
 
 - It opens small in the top right corner. Pick another place under **Position** in the menu.
-- The mouth is shut while it waits, talks while it translates and grins when it is done.
-- It speaks a little Bavarian: *Red hoid* means "just talk", *Wart a bissl* means "wait a bit".
+- A pulse keeps racing around its edge, like a signal running through redstone. With *Reduce Motion* on, it stands still.
 
 ## Languages
 
