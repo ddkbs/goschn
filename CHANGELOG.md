@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.7.0
+
+- A red pulse races around the edge of the glass
+- Removed the mouth and the Bavarian texts from the panel
+
 ## 0.6.0
 
 - Much smaller panel that opens in a corner; choose which one under Position
