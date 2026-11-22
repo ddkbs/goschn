@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.8.0
+
+- The pulse takes its color from the app you are in
+- The panel is back in the middle of the screen in its former size; the position menu is gone
+
 ## 0.7.0
 
 - A red pulse races around the edge of the glass
