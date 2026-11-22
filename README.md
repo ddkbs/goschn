@@ -24,7 +24,7 @@ This builds `Goschn.app`, copies it to `/Applications` and starts it. It launche
 
 Don't want the icon? Choose **Remove from Menu Bar…** in the menu. The same menu is always behind **⋯** in the panel, so you can bring the icon back there.
 
-To paste automatically, click **Enable pasting** in the panel and enable Goschn under *System Settings → Privacy & Security → Accessibility*. Without it, Enter only copies.
+To paste automatically, choose **Enable Pasting…** in the menu and enable Goschn under *System Settings → Privacy & Security → Accessibility*. Without it, Enter only copies.
 
 ## Keys
 
@@ -37,6 +37,12 @@ To paste automatically, click **Enable pasting** in the panel and enable Goschn 
 | `⌘1` … `⌘5` | Switch between your recent target languages |
 | `⇥` | Swap direction |
 | `esc` | Close and keep the draft |
+
+## The panel
+
+- It opens small in the top right corner. Pick another place under **Position** in the menu.
+- The mouth is shut while it waits, talks while it translates and grins when it is done.
+- It speaks a little Bavarian: *Red hoid* means "just talk", *Wart a bissl* means "wait a bit".
 
 ## Languages
 
