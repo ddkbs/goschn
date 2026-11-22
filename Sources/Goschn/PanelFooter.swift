@@ -9,13 +9,10 @@ struct PanelFooter: View {
         HStack(spacing: 8) {
             languages.chip()
             Spacer()
-            if !model.canPaste {
-                Button("Enable pasting") { Paster.requestPermission() }
-                    .chip()
-                    .help("Needs the Accessibility permission. Without it, ↩ only copies.")
-            }
             Button { model.showMenu?() } label: {
-                Image(systemName: "ellipsis").frame(height: 14)
+                Image(systemName: "ellipsis")
+                    .frame(height: 14)
+                    .overlay(alignment: .topTrailing) { pasteReminder }
             }
             .chip()
             .help("Options")
@@ -23,9 +20,16 @@ struct PanelFooter: View {
             enterHint.chip()
         }
         .buttonStyle(.plain)
-        .font(.system(size: 12, weight: .medium))
-        .padding(.horizontal, PanelStyle.padding - 10)
-        .padding(.bottom, 14)
+        .font(.system(size: 11, weight: .medium))
+        .padding(.horizontal, 10)
+        .padding(.bottom, 10)
+    }
+
+    /// The menu offers "Enable Pasting…" until it is allowed.
+    @ViewBuilder private var pasteReminder: some View {
+        if !model.canPaste {
+            Circle().fill(.orange).frame(width: 5, height: 5).offset(x: 5, y: -2)
+        }
     }
 
     private var enterHint: some View {
@@ -54,7 +58,7 @@ struct PanelFooter: View {
             }
             .help("Swap direction (Tab)")
             .accessibilityLabel("Swap direction")
-            Menu(name(model.pair.target)) {
+            Menu(short(model.pair.target)) {
                 // Key equivalents are only shown here; the panel handles them.
                 ForEach(Array(model.quickTargets.languages.enumerated()), id: \.element) { index, id in
                     choice(name(id), isOn: model.choice.target == id) { model.chooseTarget(id) }
@@ -75,11 +79,17 @@ struct PanelFooter: View {
 
     /// Nothing is detected before the user types.
     private var sourceName: String {
-        model.hasText || model.choice.source != nil ? name(model.pair.source) : "Auto"
+        model.hasText || model.choice.source != nil ? short(model.pair.source) : "Auto"
     }
 
     private func choice(_ title: String, isOn: Bool, action: @escaping () -> Void) -> some View {
         Toggle(title, isOn: Binding(get: { isOn }, set: { _ in action() }))
+    }
+
+    /// Long names such as "Chinese (Hong Kong)" become "ZH-HK".
+    private func short(_ id: String) -> String {
+        let name = name(id)
+        return name.count > 16 ? id.uppercased() : name
     }
 
     private func name(_ id: String) -> String { AppleTranslator.displayName(id) }
@@ -88,8 +98,8 @@ struct PanelFooter: View {
 private extension View {
     /// A small pill on the glass.
     func chip() -> some View {
-        padding(.horizontal, 11)
-            .frame(height: 26)
+        padding(.horizontal, 10)
+            .frame(height: 24)
             .background(.primary.opacity(0.11), in: .capsule)
             .contentShape(.capsule)
     }

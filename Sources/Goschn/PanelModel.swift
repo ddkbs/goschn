@@ -15,6 +15,7 @@ final class PanelModel {
     /// Set while the user swapped the direction with Tab.
     private(set) var swapped: LanguagePair?
     var canPaste = false
+    private(set) var position: PanelPosition
     /// Changes on every opening so the view can focus the text field.
     var focusToken = 0
     var download: TranslationSession.Configuration?
@@ -27,6 +28,7 @@ final class PanelModel {
         self.settings = settings
         choice = settings.choice
         quickTargets = settings.quickTargets
+        position = settings.position
         let translator = self.translator
         live = LiveTranslation { try await translator.translate($0, $1) }
     }
@@ -73,6 +75,11 @@ final class PanelModel {
         refresh()
     }
 
+    func choosePosition(_ position: PanelPosition) {
+        self.position = position
+        settings.position = position
+    }
+
     func swap() {
         swapped = swapped == nil ? pair.reversed : nil
         refresh()
@@ -85,6 +92,11 @@ final class PanelModel {
     }
 
     var hasText: Bool { !input.allSatisfy(\.isWhitespace) }
+
+    var mood: Mouth.Mood {
+        if live.isPending { return .talking }
+        return live.output.isEmpty ? .quiet : .happy
+    }
 
     var needsDownload: Bool {
         guard let error = live.error else { return false }

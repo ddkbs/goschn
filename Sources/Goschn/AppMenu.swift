@@ -33,6 +33,7 @@ final class AppMenu: NSObject, NSMenuDelegate {
         menu.addItem(entry("Translate  \(settings.hotKey.label)", #selector(open)))
         menu.addItem(.separator())
         menu.addItem(languageEntry())
+        menu.addItem(positionEntry())
         menu.addItem(entry("Change Shortcut…", #selector(changeShortcut)))
         if !Paster.canPaste {
             menu.addItem(entry("Enable Pasting…", #selector(allowPaste)))
@@ -60,6 +61,19 @@ final class AppMenu: NSObject, NSMenuDelegate {
         return parent
     }
 
+    private func positionEntry() -> NSMenuItem {
+        let parent = NSMenuItem(title: "Position", action: nil, keyEquivalent: "")
+        let submenu = NSMenu()
+        for position in PanelPosition.allCases {
+            let item = entry(position.title, #selector(choosePosition(_:)))
+            item.representedObject = position.rawValue
+            item.state = position == model.position ? .on : .off
+            submenu.addItem(item)
+        }
+        parent.submenu = submenu
+        return parent
+    }
+
     private func entry(_ title: String, _ action: Selector) -> NSMenuItem {
         let entry = NSMenuItem(title: title, action: action, keyEquivalent: "")
         entry.target = self
@@ -75,6 +89,12 @@ final class AppMenu: NSObject, NSMenuDelegate {
     @objc private func chooseLanguage(_ sender: NSMenuItem) {
         guard let id = sender.representedObject as? String else { return }
         model.chooseHome(id)
+    }
+
+    @objc private func choosePosition(_ sender: NSMenuItem) {
+        guard let position = (sender.representedObject as? String).flatMap(PanelPosition.init) else { return }
+        model.choosePosition(position)
+        actions.open()
     }
 
     @objc private func toggleLogin() {

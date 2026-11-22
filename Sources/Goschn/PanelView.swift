@@ -19,7 +19,7 @@ struct PanelView: View {
         .fixedSize(horizontal: false, vertical: true)
         .glassPanel()
         .padding(PanelStyle.margin)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: alignment)
         .tint(.primary)
         .onChange(of: model.focusToken, initial: true) { isFocused = true }
         .translationTask(model.download) { session in
@@ -37,15 +37,27 @@ struct PanelView: View {
         .frame(height: 1)
     }
 
+    private var alignment: Alignment {
+        model.position.isBottom ? .bottom : .top
+    }
+
     private var input: some View {
-        TextField("Type to translate…", text: $model.input, axis: .vertical)
+        HStack(alignment: .top, spacing: PanelStyle.mouthSpacing) {
+            Mouth(mood: model.mood)
+            textField
+        }
+        .padding(.horizontal, PanelStyle.padding)
+        .padding(.vertical, 15)
+    }
+
+    private var textField: some View {
+        // Bavarian for "just talk".
+        TextField("Red hoid…", text: $model.input, axis: .vertical)
             .textFieldStyle(.plain)
             .font(.system(size: PanelStyle.textSize))
-            .lineLimit(1...6)
+            .lineLimit(1...5)
             .focused($isFocused)
             .accessibilityLabel("Text to translate")
-            .padding(.horizontal, PanelStyle.padding)
-            .padding(.vertical, 20)
     }
 
     @ViewBuilder private var result: some View {
@@ -56,9 +68,9 @@ struct PanelView: View {
                     Spacer()
                     Button("Download…") { model.startDownload() }
                 }
-                .font(.system(size: 14))
+                .font(.system(size: 13))
             } else if let error = model.errorText {
-                Text(error).font(.system(size: 14)).foregroundStyle(.secondary)
+                Text(error).font(.system(size: 13)).foregroundStyle(.secondary)
             } else {
                 TranslationText(live: model.live)
                     .environment(\.layoutDirection, isRightToLeft ? .rightToLeft : .leftToRight)
@@ -66,8 +78,10 @@ struct PanelView: View {
         }
         .font(.system(size: PanelStyle.textSize, weight: .medium))
         .frame(maxWidth: .infinity, alignment: .leading)
+        // Lines up with the typed text.
+        .padding(.leading, PanelStyle.mouthSize.width + PanelStyle.mouthSpacing)
         .padding(.horizontal, PanelStyle.padding)
-        .padding(.vertical, 20)
+        .padding(.vertical, 14)
     }
 
     private var isRightToLeft: Bool {
