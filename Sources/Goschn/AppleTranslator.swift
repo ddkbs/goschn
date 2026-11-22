@@ -56,6 +56,7 @@ final class AppleTranslator {
     }
 
     static func displayName(_ id: String) -> String {
-        Locale.current.localizedString(forIdentifier: id) ?? id
+        // English like the rest of the interface.
+        Locale(identifier: "en").localizedString(forIdentifier: id) ?? id
     }
 }
