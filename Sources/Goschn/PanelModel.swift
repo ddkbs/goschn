@@ -83,6 +83,8 @@ final class PanelModel {
         input = ""
     }
 
+    var hasText: Bool { !input.allSatisfy(\.isWhitespace) }
+
     var needsDownload: Bool {
         guard let error = live.error else { return false }
         return TranslationError.notInstalled ~= error

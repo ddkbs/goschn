@@ -18,8 +18,8 @@ final class PanelController: NSObject, NSWindowDelegate {
     init(model: PanelModel) {
         self.model = model
         panel = FloatingPanel(
-            contentRect: NSRect(x: 0, y: 0, width: 640, height: 110),
-            styleMask: [.borderless, .nonactivatingPanel, .fullSizeContentView],
+            contentRect: NSRect(origin: .zero, size: PanelStyle.windowSize),
+            styleMask: [.borderless, .nonactivatingPanel],
             backing: .buffered, defer: false
         )
         super.init()
@@ -27,14 +27,13 @@ final class PanelController: NSObject, NSWindowDelegate {
         panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .transient]
         panel.isOpaque = false
         panel.backgroundColor = .clear
-        panel.hasShadow = true
+        panel.hasShadow = false  // Drawn by the view; the window is larger than the panel.
         panel.hidesOnDeactivate = false
-        panel.isMovableByWindowBackground = true
-        panel.animationBehavior = .utilityWindow
+        panel.animationBehavior = .none
         panel.isReleasedWhenClosed = false
         panel.title = "Goschn"
         panel.delegate = self
-        panel.contentView = makeContent()
+        panel.contentView = NSHostingView(rootView: PanelView(model: model))
     }
 
     func toggle() { panel.isVisible ? hide() : show() }
@@ -141,36 +140,6 @@ final class PanelController: NSObject, NSWindowDelegate {
 
     // MARK: - Layout
 
-    private func makeContent() -> NSView {
-        let background = NSVisualEffectView()
-        background.material = .popover
-        background.state = .active
-        background.blendingMode = .behindWindow
-        background.maskImage = Self.mask(radius: 18)
-
-        let host = NSHostingView(rootView: PanelView(model: model) { [weak self] in self?.resize(to: $0) })
-        host.sizingOptions = []
-        host.translatesAutoresizingMaskIntoConstraints = false
-        background.addSubview(host)
-        NSLayoutConstraint.activate([
-            host.topAnchor.constraint(equalTo: background.topAnchor),
-            host.bottomAnchor.constraint(equalTo: background.bottomAnchor),
-            host.leadingAnchor.constraint(equalTo: background.leadingAnchor),
-            host.trailingAnchor.constraint(equalTo: background.trailingAnchor),
-        ])
-        return background
-    }
-
-    /// Grows and shrinks downwards; the top edge stays put.
-    private func resize(to height: CGFloat) {
-        guard height > 0, abs(panel.frame.height - height) > 0.5 else { return }
-        var frame = panel.frame
-        frame.origin.y = frame.maxY - height
-        frame.size.height = height
-        panel.setFrame(frame, display: true)
-        panel.invalidateShadow()
-    }
-
     /// Upper third of the screen the mouse is on.
     private func place() {
         let mouse = NSEvent.mouseLocation
@@ -178,18 +147,7 @@ final class PanelController: NSObject, NSWindowDelegate {
         guard let area = screen?.visibleFrame else { return }
         panel.setFrameTopLeftPoint(NSPoint(
             x: area.midX - panel.frame.width / 2,
-            y: area.maxY - area.height * 0.22
+            y: area.maxY - area.height * 0.2 + PanelStyle.margin
         ))
-    }
-
-    private static func mask(radius: CGFloat) -> NSImage {
-        let side = radius * 2 + 1
-        let image = NSImage(size: NSSize(width: side, height: side), flipped: false) { rect in
-            NSBezierPath(roundedRect: rect, xRadius: radius, yRadius: radius).fill()
-            return true
-        }
-        image.capInsets = NSEdgeInsets(top: radius, left: radius, bottom: radius, right: radius)
-        image.resizingMode = .stretch
-        return image
     }
 }
