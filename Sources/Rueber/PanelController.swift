@@ -95,7 +95,7 @@ final class PanelController: NSObject, NSWindowDelegate {
                 commit(paste: !flags.contains(.command))
             }
         case kVK_Tab:
-            model.isReversed.toggle()
+            model.swap()
         default:
             return handleEditShortcut(event, flags: flags)
         }
@@ -105,6 +105,7 @@ final class PanelController: NSObject, NSWindowDelegate {
     /// A menu-bar app has no Edit menu, so ⌘C and friends are routed here.
     private func handleEditShortcut(_ event: NSEvent, flags: NSEvent.ModifierFlags) -> Bool {
         guard flags.contains(.command), let key = event.charactersIgnoringModifiers?.lowercased() else { return false }
+        if let number = Int(key), model.chooseQuickTarget(number) { return true }
         let selector: Selector
         switch (key, flags.contains(.shift)) {
         case ("a", false): selector = #selector(NSText.selectAll(_:))
@@ -130,7 +131,7 @@ final class PanelController: NSObject, NSWindowDelegate {
             guard let text else { return }
             Paster.copy(text)
             hide()
-            model.input = ""
+            model.reset()
             guard paste, Paster.canPaste else { return }
             // Let the previous app get its focus back first.
             try? await Task.sleep(for: .milliseconds(80))

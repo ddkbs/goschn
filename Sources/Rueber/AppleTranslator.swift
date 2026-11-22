@@ -46,7 +46,12 @@ final class AppleTranslator {
     }
 
     static func supportedLanguages() async -> [String] {
-        let ids = await LanguageAvailability().supportedLanguages.map(\.minimalIdentifier)
+        var ids = await LanguageAvailability().supportedLanguages.map(\.minimalIdentifier)
+        if #available(macOS 26.4, *) {
+            // The larger model knows more languages than the default one.
+            let best = LanguageAvailability(preferredStrategy: .highFidelity)
+            ids += await best.supportedLanguages.map(\.minimalIdentifier)
+        }
         return Array(Set(ids)).sorted { displayName($0).localizedCompare(displayName($1)) == .orderedAscending }
     }
 

@@ -11,17 +11,23 @@ public struct LanguagePair: Hashable, Sendable {
 
     public var reversed: LanguagePair { LanguagePair(source: target, target: source) }
 
-    /// Short label such as "DE → EN".
-    public var label: String { "\(Self.short(source)) → \(Self.short(target))" }
-
-    private static func short(_ id: String) -> String {
-        id.split(separator: "-").first.map { $0.uppercased() } ?? id.uppercased()
+    /// The user's own language: the first preferred one.
+    public static func homeLanguage(preferred: [String] = Locale.preferredLanguages) -> String {
+        preferred.first.map(minimal) ?? "en"
     }
 
-    /// The user's own language: the first preferred one that is not English.
-    public static func homeLanguage(preferred: [String] = Locale.preferredLanguages) -> String {
-        preferred
-            .map { Locale.Language(identifier: $0).minimalIdentifier }
-            .first { !$0.hasPrefix("en") } ?? "de"
+    /// The first target to offer: another language the user knows, else English.
+    public static func defaultTarget(preferred: [String] = Locale.preferredLanguages) -> String {
+        let home = homeLanguage(preferred: preferred)
+        return preferred.map(minimal).first { !$0.isSameLanguage(as: home) } ?? fallback(for: home)
+    }
+
+    /// Something useful to translate to when only one language is known.
+    static func fallback(for home: String) -> String {
+        home.isSameLanguage(as: "en") ? "es" : "en"
+    }
+
+    private static func minimal(_ id: String) -> String {
+        Locale.Language(identifier: id).minimalIdentifier
     }
 }

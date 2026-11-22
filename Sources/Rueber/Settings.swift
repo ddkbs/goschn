@@ -18,7 +18,23 @@ final class Settings {
         set { defaults.set(newValue, forKey: "homeLanguage") }
     }
 
-    var pair: LanguagePair { LanguagePair(source: homeLanguage, target: "en") }
+    /// nil means: detect it.
+    var source: String? {
+        get { defaults.string(forKey: "source") }
+        set { defaults.set(newValue, forKey: "source") }
+    }
+
+    var target: String {
+        get { defaults.string(forKey: "target") ?? LanguagePair.defaultTarget() }
+        set { defaults.set(newValue, forKey: "target") }
+    }
+
+    var quickTargets: QuickTargets {
+        get { QuickTargets(defaults.stringArray(forKey: "quickTargets") ?? [target, homeLanguage]) }
+        set { defaults.set(newValue.languages, forKey: "quickTargets") }
+    }
+
+    var choice: LanguageChoice { LanguageChoice(source: source, target: target, home: homeLanguage) }
 
     var launchesAtLogin: Bool { SMAppService.mainApp.status == .enabled }
 

@@ -9,7 +9,11 @@ import Translation
 final class PanelModel {
     let live: LiveTranslation
     var input = "" { didSet { if input != oldValue { refresh() } } }
-    var isReversed = false { didSet { if isReversed != oldValue { refresh() } } }
+    private(set) var choice: LanguageChoice
+    private(set) var quickTargets: QuickTargets
+    private(set) var languages: [String] = []
+    /// Set while the user swapped the direction with Tab.
+    private(set) var swapped: LanguagePair?
     var canPaste = false
     /// Changes on every opening so the view can focus the text field.
     var focusToken = 0
@@ -20,11 +24,64 @@ final class PanelModel {
 
     init(settings: Settings) {
         self.settings = settings
+        choice = settings.choice
+        quickTargets = settings.quickTargets
         let translator = self.translator
         live = LiveTranslation { try await translator.translate($0, $1) }
     }
 
-    var pair: LanguagePair { isReversed ? settings.pair.reversed : settings.pair }
+    var pair: LanguagePair { swapped ?? choice.pair(detected: detected) }
+
+    private var detected: String? {
+        guard choice.source == nil else { return nil }
+        return LanguageDetector(supported: languages).detect(input, home: choice.home, target: choice.target)
+    }
+
+    func loadLanguages() async {
+        languages = await AppleTranslator.supportedLanguages()
+        refresh()
+    }
+
+    /// nil turns detection back on.
+    func chooseSource(_ id: String?) {
+        swapped = nil
+        choice.source = id
+        settings.source = id
+        refresh()
+    }
+
+    func chooseTarget(_ id: String) {
+        swapped = nil
+        choice.target = id
+        settings.target = id
+        quickTargets.use(id)
+        settings.quickTargets = quickTargets
+        refresh()
+    }
+
+    func chooseQuickTarget(_ number: Int) -> Bool {
+        guard let id = quickTargets.language(at: number) else { return false }
+        chooseTarget(id)
+        return true
+    }
+
+    func chooseHome(_ id: String) {
+        swapped = nil
+        choice.home = id
+        settings.homeLanguage = id
+        refresh()
+    }
+
+    func swap() {
+        swapped = swapped == nil ? pair.reversed : nil
+        refresh()
+    }
+
+    /// Clears the text after it was used; the swap was meant for that text.
+    func reset() {
+        swapped = nil
+        input = ""
+    }
 
     var needsDownload: Bool {
         guard let error = live.error else { return false }

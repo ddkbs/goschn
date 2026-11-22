@@ -14,8 +14,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             settings: settings,
             onOpen: { [weak self] in self?.panel.show() },
             onChangeShortcut: { [weak self] in self?.changeShortcut() },
-            onLanguageChange: { [weak self] in self?.model.refresh() }
+            model: model
         )
+        Task { await model.loadLanguages() }
         settings.enableLaunchAtLoginOnFirstRun()
         model.translator.warmUp(model.pair)
         if !hotKey.register(settings.hotKey) {

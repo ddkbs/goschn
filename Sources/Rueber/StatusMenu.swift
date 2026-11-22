@@ -8,25 +8,23 @@ final class StatusMenu: NSObject, NSMenuDelegate {
     private let settings: Settings
     private let onOpen: () -> Void
     private let onChangeShortcut: () -> Void
-    private let onLanguageChange: () -> Void
-    private var languages: [String] = []
+    private let model: PanelModel
 
     init(
         settings: Settings,
         onOpen: @escaping () -> Void,
         onChangeShortcut: @escaping () -> Void,
-        onLanguageChange: @escaping () -> Void
+        model: PanelModel
     ) {
         self.settings = settings
         self.onOpen = onOpen
         self.onChangeShortcut = onChangeShortcut
-        self.onLanguageChange = onLanguageChange
+        self.model = model
         super.init()
         item.button?.image = NSImage(systemSymbolName: "translate", accessibilityDescription: "Rüber")
         let menu = NSMenu()
         menu.delegate = self
         item.menu = menu
-        Task { languages = await AppleTranslator.supportedLanguages() }
     }
 
     func menuNeedsUpdate(_ menu: NSMenu) {
@@ -48,7 +46,7 @@ final class StatusMenu: NSObject, NSMenuDelegate {
     private func languageEntry() -> NSMenuItem {
         let parent = NSMenuItem(title: "My Language", action: nil, keyEquivalent: "")
         let submenu = NSMenu()
-        for id in languages where !id.hasPrefix("en") {
+        for id in model.languages {
             let language = entry(AppleTranslator.displayName(id), #selector(chooseLanguage(_:)))
             language.representedObject = id
             language.state = id == settings.homeLanguage ? .on : .off
@@ -70,8 +68,7 @@ final class StatusMenu: NSObject, NSMenuDelegate {
 
     @objc private func chooseLanguage(_ sender: NSMenuItem) {
         guard let id = sender.representedObject as? String else { return }
-        settings.homeLanguage = id
-        onLanguageChange()
+        model.chooseHome(id)
     }
 
     @objc private func toggleLogin() {

@@ -7,8 +7,8 @@ enum RueberApp {
 
     @MainActor
     static func main() {
-        if let index = CommandLine.arguments.firstIndex(of: "--translate") {
-            CommandLineMode.run(text: CommandLine.arguments.dropFirst(index + 1).joined(separator: " "))
+        if CommandLine.arguments.contains("--translate") {
+            CommandLineMode.run(arguments: CommandLine.arguments)
         }
         let app = NSApplication.shared
         app.delegate = delegate
