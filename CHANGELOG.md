@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.0
+
+- While you type, restless letters show the translation being worked on and settle from left to right
+
 ## 0.3.0
 
 - The app is now called Goschn (it was Rüber)
