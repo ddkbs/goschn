@@ -47,7 +47,7 @@ Over 20 languages in every direction: click a language name at the bottom of the
 ## Good to know
 
 - The translation is the only thing left on your clipboard; nothing is stored and nothing leaves your Mac.
-- While you type, restless letters show that the other side is working; they settle into the translation. With *Reduce Motion* on, it stays calm.
+- While a translation is on its way, its text shimmers. With *Reduce Motion* on, it is only dimmed.
 - Line breaks, indentation and list markers stay as you typed them.
 - With Apple's larger model it takes about half a second. If it is not available, Goschn uses the smaller one and offers to download the language.
 - Very repetitive text can make the larger model repeat itself.
