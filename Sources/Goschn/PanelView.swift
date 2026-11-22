@@ -5,22 +5,31 @@ import Translation
 struct PanelView: View {
     @Bindable var model: PanelModel
     @FocusState private var isFocused: Bool
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         VStack(spacing: 0) {
             input
             if model.hasText {
                 line
-                result
+                // Wait for the room, or it would lie on top of the footer.
+                result.transition(.asymmetric(
+                    insertion: .opacity.animation(.easeOut(duration: 0.15).delay(0.12)), removal: .identity
+                ))
             }
             PanelFooter(model: model)
+                // It moves as a whole; its labels change at once.
+                .transaction { $0.animation = nil }
+                .geometryGroup()
         }
         .frame(width: PanelStyle.width)
         .fixedSize(horizontal: false, vertical: true)
         .glassPanel()
         .overlay(EdgePulse(shape: PanelStyle.shape, color: model.pulseColor, isRunning: model.isOpen))
         .padding(PanelStyle.margin)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        // The text moves up when the result appears; let it glide.
+        .animation(reduceMotion ? nil : .smooth(duration: 0.22), value: model.hasText)
         .tint(.primary)
         .onChange(of: model.focusToken, initial: true) { isFocused = true }
         .translationTask(model.download) { session in
