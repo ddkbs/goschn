@@ -15,6 +15,8 @@ final class PanelModel {
     /// Set while the user swapped the direction with Tab.
     private(set) var swapped: LanguagePair?
     var canPaste = false
+    /// Animations rest while the panel is hidden.
+    var isOpen = false
     private(set) var position: PanelPosition
     /// Changes on every opening so the view can focus the text field.
     var focusToken = 0

@@ -45,6 +45,7 @@ final class PanelController: NSObject, NSWindowDelegate {
         model.canPaste = Paster.canPaste
         model.translator.warmUp(model.pair)
         place()
+        model.isOpen = true
         panel.makeKeyAndOrderFront(nil)
         model.focusToken += 1
         installKeyMonitor()
@@ -59,6 +60,7 @@ final class PanelController: NSObject, NSWindowDelegate {
         commitTask = nil
         removeKeyMonitor()
         panel.orderOut(nil)
+        model.isOpen = false
         if returningFocus, NSApp.isActive { NSApp.hide(nil) }
     }
 

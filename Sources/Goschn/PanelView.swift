@@ -18,6 +18,7 @@ struct PanelView: View {
         .frame(width: PanelStyle.width)
         .fixedSize(horizontal: false, vertical: true)
         .glassPanel()
+        .overlay(EdgePulse(shape: PanelStyle.shape, isRunning: model.isOpen))
         .padding(PanelStyle.margin)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: alignment)
         .tint(.primary)
