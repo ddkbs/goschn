@@ -34,6 +34,11 @@ final class Settings {
         set { defaults.set(newValue.languages, forKey: "quickTargets") }
     }
 
+    var showsMenuBarIcon: Bool {
+        get { defaults.object(forKey: "showsMenuBarIcon") as? Bool ?? true }
+        set { defaults.set(newValue, forKey: "showsMenuBarIcon") }
+    }
+
     var choice: LanguageChoice { LanguageChoice(source: source, target: target, home: homeLanguage) }
 
     var launchesAtLogin: Bool { SMAppService.mainApp.status == .enabled }

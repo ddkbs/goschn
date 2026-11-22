@@ -1,30 +1,31 @@
 import AppKit
 import GoschnCore
 
-/// The menu bar icon and its menu.
+/// The app's menu. It opens from the menu bar icon and from the panel, so it
+/// stays reachable when the icon is hidden.
 @MainActor
-final class StatusMenu: NSObject, NSMenuDelegate {
-    private let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
-    private let settings: Settings
-    private let onOpen: () -> Void
-    private let onChangeShortcut: () -> Void
-    private let model: PanelModel
+final class AppMenu: NSObject, NSMenuDelegate {
+    struct Actions {
+        let open: () -> Void
+        let changeShortcut: () -> Void
+        let setMenuBarIcon: (Bool) -> Void
+    }
 
-    init(
-        settings: Settings,
-        onOpen: @escaping () -> Void,
-        onChangeShortcut: @escaping () -> Void,
-        model: PanelModel
-    ) {
+    let menu = NSMenu()
+    private let settings: Settings
+    private let model: PanelModel
+    private let actions: Actions
+
+    init(settings: Settings, model: PanelModel, actions: Actions) {
         self.settings = settings
-        self.onOpen = onOpen
-        self.onChangeShortcut = onChangeShortcut
         self.model = model
+        self.actions = actions
         super.init()
-        item.button?.image = NSImage(systemSymbolName: "mouth.fill", accessibilityDescription: "Goschn")
-        let menu = NSMenu()
         menu.delegate = self
-        item.menu = menu
+    }
+
+    func popUpAtMouse() {
+        menu.popUp(positioning: nil, at: NSEvent.mouseLocation, in: nil)
     }
 
     func menuNeedsUpdate(_ menu: NSMenu) {
@@ -34,11 +35,14 @@ final class StatusMenu: NSObject, NSMenuDelegate {
         menu.addItem(languageEntry())
         menu.addItem(entry("Change Shortcut…", #selector(changeShortcut)))
         if !Paster.canPaste {
-            menu.addItem(entry("Allow Auto-Paste…", #selector(allowPaste)))
+            menu.addItem(entry("Enable Pasting…", #selector(allowPaste)))
         }
         let login = entry("Launch at Login", #selector(toggleLogin))
         login.state = settings.launchesAtLogin ? .on : .off
         menu.addItem(login)
+        menu.addItem(settings.showsMenuBarIcon
+            ? entry("Remove from Menu Bar…", #selector(hideIcon))
+            : entry("Show in Menu Bar", #selector(showIcon)))
         menu.addItem(.separator())
         menu.addItem(withTitle: "Quit Goschn", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
     }
@@ -62,9 +66,11 @@ final class StatusMenu: NSObject, NSMenuDelegate {
         return entry
     }
 
-    @objc private func open() { onOpen() }
-    @objc private func changeShortcut() { onChangeShortcut() }
+    @objc private func open() { actions.open() }
+    @objc private func changeShortcut() { actions.changeShortcut() }
     @objc private func allowPaste() { Paster.requestPermission() }
+    @objc private func hideIcon() { actions.setMenuBarIcon(false) }
+    @objc private func showIcon() { actions.setMenuBarIcon(true) }
 
     @objc private func chooseLanguage(_ sender: NSMenuItem) {
         guard let id = sender.representedObject as? String else { return }

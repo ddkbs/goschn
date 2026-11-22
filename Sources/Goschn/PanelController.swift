@@ -49,12 +49,14 @@ final class PanelController: NSObject, NSWindowDelegate {
         DispatchQueue.main.async { (self.panel.firstResponder as? NSTextView)?.selectAll(nil) }
     }
 
-    func hide() {
+    /// Pass false when a dialog of this app follows; otherwise the focus goes
+    /// back to the app the user came from.
+    func hide(returningFocus: Bool = true) {
         commitTask?.cancel()
         commitTask = nil
         removeKeyMonitor()
         panel.orderOut(nil)
-        if NSApp.isActive { NSApp.hide(nil) }
+        if returningFocus, NSApp.isActive { NSApp.hide(nil) }
     }
 
     func windowDidResignKey(_ notification: Notification) {

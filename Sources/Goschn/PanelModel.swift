@@ -19,6 +19,7 @@ final class PanelModel {
     var focusToken = 0
     var download: TranslationSession.Configuration?
 
+    @ObservationIgnored var showMenu: (() -> Void)?
     @ObservationIgnored let translator = AppleTranslator()
     @ObservationIgnored private let settings: Settings
 
