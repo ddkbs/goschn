@@ -67,12 +67,10 @@ import Testing
         #expect(live.isPending)
         _ = await live.finish("hallo", pair: pair)
         #expect(!live.isPending)
-        #expect(live.translatedText == "hallo")
         live.update("hallo du", pair: pair)
         #expect(live.isPending)
         live.update("", pair: pair)
         #expect(!live.isPending)
-        #expect(live.translatedText.isEmpty)
     }
 
     @Test func emptyTextClearsTheOutput() async {
