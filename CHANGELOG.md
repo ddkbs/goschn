@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.1
+
+- A calm shimmer replaces the restless letters while translating
+
 ## 0.4.0
 
 - While you type, restless letters show the translation being worked on and settle from left to right
